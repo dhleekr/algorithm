@@ -25,8 +25,8 @@ def block_move(block):
             if green[i][y] == 1 or green[i][y+1] == 1:
                 break
             g_idx += 1
-            green[g_idx-1][y] = 1
-            green[g_idx-1][y+1] = 1
+        green[g_idx-1][y] = 1
+        green[g_idx-1][y+1] = 1
 
 
     # blue
@@ -36,16 +36,16 @@ def block_move(block):
             if blue[j][3-x] == 1:
                 break
             b_idx += 1
-            blue[b_idx-1][3-x] = 1
-            if t == 2:
-                blue[b_idx-2][3-x] = 1
+        blue[b_idx-1][3-x] = 1
+        if t == 2:
+            blue[b_idx-2][3-x] = 1
     else:
         for j in range(6):
             if blue[j][3-x] == 1 or blue[j][2-x] == 1:
                 break
             b_idx += 1
-            blue[b_idx-1][3-x] = 1
-            blue[b_idx-1][2-x] = 1
+        blue[b_idx-1][3-x] = 1
+        blue[b_idx-1][2-x] = 1
             
 def block_boom(): 
     green_score = 0
@@ -76,7 +76,7 @@ def light_color_check():
             green[0] = [0, 0, 0, 0]
         
         if sum(blue[i]) != 0:
-            blue[1:] = green[:5]
+            blue[1:] = blue[:5]
             blue[0] = [0, 0, 0, 0]
 
 
@@ -90,9 +90,6 @@ for idx, block in enumerate(blocks):
     ans += green_score + blue_score
 
     light_color_check()
-    print(f'{idx+1}th green ', green)
-    print(f'{idx+1}th blue ', blue)
-
 
 block_sum = 0
 for i in range(6):
