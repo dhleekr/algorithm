@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 def init():
     fish_information = [list(map(int, input().split())) for _ in range(4)]
     grid = []
@@ -55,6 +53,15 @@ def fish_move(grid, shark):
             grid[i][j], grid[new_i][new_j] = grid[new_i][new_j], grid[i][j]
 
     return grid
+
+def deepcopy(grid):
+    new_grid = []
+    for i in range(4):
+        temp = []
+        for j in range(4):
+            temp.append(grid[i][j][:])
+        new_grid.append(temp)
+    return new_grid
 
 def dfs(i, j, score, grid):
     global answer
