@@ -6,7 +6,6 @@ def deepcopy(grid):
 
     return new_grid
 
-
 def combination(array, r):
     for i in range(len(array)):
         if r == 1:
