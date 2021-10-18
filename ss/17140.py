@@ -2,91 +2,85 @@ def init():
     r, c, k = map(int, input().split())
     grid = [list(map(int, input().split())) for _ in range(3)]
 
-    return r, c, k, grid
+    return r-1, c-1, k, grid
 
 def sorting(arr):
-    for i in reversed(range(len(arr))):
-        if arr[i] == 0:
-            arr.pop(i)
     temp = []
-    for i in range(1, 100):
+    max_num = max(arr)
+    for i in range(1, max_num+1):
         cnt = arr.count(i)
-        if cnt:
+        if cnt != 0:
             temp.append([i, cnt])
+    temp.sort(key=lambda x: [x[1], x[0]])
 
-    temp.sort(key=lambda x : [x[1], x[0]])
+    new_arr = []
+    for j in temp:
+        new_arr.extend(j)
 
-    new = []
-    for x in temp:
-        new.append(x[0])
-        new.append(x[1])
+    return new_arr
 
-    return new
+def padding(grid):
+    max_len = 0
+    for temp in grid:
+        if len(temp) > 100:
+            temp = temp[:100]
+            max_len = 100
+        else:
+            max_len = max(max_len, len(temp))
 
-def check():
-    if len(grid) < r or len(grid[0]) < c:
-        return False
-    if grid[r-1][c-1] == k:
-        return True
-    return False
+    for temp in grid:
+        temp.extend([0]*(max_len-len(temp)))
 
-def padding(length, arr):
-    arr.extend([0]*(length - len(arr)))
+    return grid
 
-    return arr
-
-r, c, k, grid = init()
-t = 0
-while not check():
-    if t >= 100:
-        break
+def transpose(grid):
     row = len(grid)
     col = len(grid[0])
-    temp = []
-    if row >= col:
-        max_row = 0
-        for i in range(row):
-            new_row = sorting(grid[i])
-            temp.append(new_row)
-            if max_row < len(new_row):
-                if len(new_row) <= 100:
-                    max_row = len(new_row)
-                else:
-                    max_row = 100
-                    new_row = new_row[:100]
 
-        grid = [[0]*max_row for _ in range(row)]
-        for idx, new_row in enumerate(temp):
-            if len(new_row) < max_row:
-                new_row = padding(max_row, new_row)
-            grid[idx] = new_row
+    new_grid = [[0 for row in range(row)] for col in range(col)]
+
+    for i in range(row):
+        for j in range(col):
+            new_grid[j][i] = grid[i][j]
+
+    return new_grid
+
+def calculation(grid):
+    row_num = len(grid)
+    col_num = len(grid[0])
+
+    if row_num >= col_num:
+        temp_grid = []
+        for i in grid:
+            new_arr = sorting(i)
+            temp_grid.append(new_arr)
+        grid = padding(temp_grid)
 
     else:
-        max_col = 0
-        for i in range(col):
-            new_col = []
-            for j in range(row):
-                new_col.append(grid[j][i])
+        temp_grid = []
+        for j in range(col_num):
+            temp_arr = []
+            for i in range(row_num):
+                temp_arr.append(grid[i][j])
+            new_arr = sorting(temp_arr)
+            temp_grid.append(new_arr)
+        grid = padding(temp_grid)
+        grid = transpose(grid)
+    
+    return grid
 
-            new_col = sorting(new_col)
-            temp.append(new_col)
-            if max_col < len(new_col):
-                if len(new_col) <= 100:
-                    max_col = len(new_col)
-                else:
-                    max_col = 100
-                    new_col = new_col[:100]
 
-        grid = [[0]*col for _ in range(max_col)]
-        for idx, new_col in enumerate(temp):
-            if len(new_col) < max_col:
-                new_col = padding(max_col, new_col)
-            for i, value in enumerate(new_col):
-                grid[i][idx] = value
+r, c, k, grid = init()
 
-    t += 1
+for i in range(102):
+    try: 
+        if grid[r][c] == k:
+            print(i)
+            break
+        grid = calculation(grid)
+    
+    except:
+        grid = calculation(grid)
 
-if t == 100:
+if i == 101:
     print(-1)
-else:
-    print(t)
