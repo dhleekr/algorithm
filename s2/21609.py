@@ -78,7 +78,9 @@ while True:
 
     if not blocks:
         break
+    print(blocks)
     blocks.sort(reverse=True)
+    print(blocks)
 
     for (i, j) in blocks[0][2]:
         grid[i][j] = -2
