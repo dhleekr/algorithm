@@ -19,10 +19,22 @@ def permutation(array, r):
                 yield [array[i]] + next
 
 # Combination 함수 구현
-def combination(chicken, m):
-    for i in range(len(chicken)):
+def combination(array, m):
+    for i in range(len(array)):
         if m == 1:
-            yield [chicken[i]]
+            yield [array[i]]
         else:
-            for next in combination(chicken[i+1:], m-1):
-                yield [chicken[i]] + next
+            for next in combination(array[i+1:], m-1):
+                yield [array[i]] + next
+
+# Deepcopy 구현
+def deepcopy(grid):
+    new_grid = []
+    for i in range(N):
+        new_grid.append(grid[i][:])
+    return new_grid
+
+# Graph 표현
+graph = [[] for _ in range(n+1)] # n : node 개수
+for _ in range(e): # e : edge 개수
+    graph[a].append(b) # a -> b
