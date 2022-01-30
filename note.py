@@ -9,6 +9,14 @@ def rotation(grid):
     
     return new_grid
 
+# Permutation 함수 구현
+def permutation(array, r):
+    for i in range(len(array)):
+        if r == 1:
+            yield [array[i]]
+        else:
+            for next in permutation(array[:i]+array[i+1:], r-1):
+                yield [array[i]] + next
 
 # Combination 함수 구현
 def combination(chicken, m):
