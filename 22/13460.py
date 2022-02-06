@@ -1,30 +1,57 @@
+n, m = map(int, input().split())
+grid = [list(input().strip()) for _ in range(n)]
+
 di = [0, 1, 0, -1]
 dj = [1, 0, -1, 0]
 
-def move(grid, ball, i, j, d):
-    end = False
-    check = False
-    grid[i][j] = '.'
+q = []
 
-    while True:
+visited = [[[[False] * m for _ in range(n)] for _ in range(m)] for _ in range(n)]
+
+def pos():
+    ri, rj, bi, bj = 0, 0, 0, 0
+    for i in range(n):
+        for j in range(m):
+            if grid[i][j] == 'R':
+                ri, rj = i, j
+            elif grid[i][j] == 'B':
+                bi, bj = i, j
+    q.append((ri, rj, bi, bj, 1))
+    visited[ri][rj][bi][bj] = True
+
+def move(i, j, d):
+    cnt = 0
+    while grid[i + di[d]][j + dj[d]] != '#' and grid[i][j] != 'O':
         i += di[d]
         j += dj[d]
+        cnt += 1
+    return i, j, cnt
 
-        if grid[i][j] == "O":
-            end = True
-            check = True
-            return grid, check, end
+def solve():
+    pos()
+    while q:
+        ri, rj, bi, bj, depth = q.pop(0)
+        if depth > 10:
+            break
         
-        if grid[i][j] == "#":
-            check = True
-            i -= di[d]
-            j -= dj[d]
-            grid[i][j] = ball
-            return grid, check, end
+        for d in range(4):
+            nri, nrj, rcnt = move(ri, rj, d)
+            nbi, nbj, bcnt = move(bi, bj, d)
+            if grid[nbi][nbj] != 'O':
+                if grid[nri][nrj] == 'O':
+                    print(depth)
+                    return
+                if nri == nbi and nrj == nbj:
+                    if rcnt > bcnt:
+                        nri -= di[d]
+                        nrj -= dj[d]
+                    else:
+                        nbi -= di[d]
+                        nbj -= dj[d]
+                if not visited[nri][nrj][nbi][nbj]:
+                    visited[nri][nrj][nbi][nbj] = True
+                    q.append((nri, nrj, nbi, nbj, depth + 1))
+                    
+    print(-1)
 
-n, m = map(int, input().split())
-grid = [list(input() for _ in range(n))]
-
-# grid, check, end = move(grid, "B", 1, 3, 2)
-print(grid)
-# print(check)
+solve()
