@@ -21,25 +21,19 @@ def dragon_curve(x, y, d, g):
                 res.extend(temp)
     return res
 
-def check_square(x, y, arr):
-    for d in range(4):
-        x += dx[d]
-        y += dy[d]
-        if [x, y] not in arr:
-            return False
-    return True
-
 
 n, curvees = init() # curves : x, y, d(direction), g(generation)
-arr = []
+
+grid = [[0] * 101 for _ in range(101)]
 for x, y, d, g in curvees:
     res = dragon_curve(x, y, d, g)
     for i in res:
-        if i not in arr:
-            arr.append(i)
+        if grid[i[0]][i[1]] == 0:
+            grid[i[0]][i[1]] = 1
 
 ans = 0
-for x, y in arr:
-    if check_square(x, y, arr):
-        ans += 1
+for i in range(100): # i + 1 까지 하니까 100
+    for j in range(100): # j + 1 까지 하니까 100
+        if grid[i][j] == 1 and grid[i + 1][j] == 1 and grid[i][j + 1] == 1 and grid[i + 1][j + 1] == 1:
+            ans += 1
 print(ans)
