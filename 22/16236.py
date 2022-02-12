@@ -1,51 +1,61 @@
-def bfs(i, j):
-    visit = [[0] * n for i in range(n)]
-    visit[i][j] = 1
+di = [0, 1, 0, -1]
+dj = [1, 0, -1, 0]
+
+def init():
+    n = int(input())
+    grid = []
+    for i in range(n):
+        temp = list(map(int, input().split()))
+        for j in range(n):
+            if temp[j] == 9:
+                shark = [i, j]
+                temp[j] = 2
+        grid.append(temp)
+        
+    return n, grid, shark
+
+def bfs(shark):
+    i, j = shark
+    q = [[i, j, 0]]
     eat = []
-    dist = [[0] * n for i in range(n)]
-    q = [[i, j]]
+    visited = [[0] * n for _ in range(n)]
+    visited[i][j] = 1 
     while q:
-        x, y = q.pop(0)
-        for k in range(4):
-            nx = x + dx[k]
-            ny = y + dy[k]
-            if 0 <= nx < n and 0 <= ny < n and visit[nx][ny] == 0:
-                if s[nx][ny] <= s[i][j] or s[nx][ny] == 0:
-                    q.append([nx, ny])
-                    visit[nx][ny] = 1
-                    dist[nx][ny] = dist[x][y] + 1
-                if s[nx][ny] < s[i][j] and s[nx][ny] != 0:
-                    eat.append([nx, ny, dist[nx][ny]])
+        i, j, dist = q.pop(0)
+        dist += 1
+        for d in range(4):
+            new_i = i + di[d]
+            new_j = j + dj[d]
+            if 0 <= new_i < n and 0 <= new_j < n and grid[new_i][new_j] <= grid[shark[0]][shark[1]] and visited[new_i][new_j] == 0:
+                visited[new_i][new_j] = 1
+                q.append([new_i, new_j, dist])
+                if 0 < grid[new_i][new_j] < grid[shark[0]][shark[1]]:
+                    eat.append([new_i, new_j, dist])
+
     if not eat:
-        return -1, -1, -1
-    eat.sort(key = lambda x : (x[2], x[0], x[1]))
-    return eat[0][0], eat[0][1], eat[0][2]
+        return None
+    eat.sort(key=lambda x: (x[2], x[0], x[1]))
+    return eat[0]
 
-dx = [1, -1, 0, 0]
-dy = [0, 0, -1, 1]
 
-n = int(input())
-s = []
-for i in range(n):
-    a = list(map(int, input().split()))
-    s.append(a)
-    for j in range(n):
-        if a[j] == 9:
-            s[i][j] = 2
-            start = [i, j]
-exp = 0
+n, grid,shark = init()
+
+ans = 0
 cnt = 0
-while True:
-    i, j = start[0], start[1]
-    ex, ey, dist = bfs(i, j)
-    if ex == -1: 
-        break
-    s[ex][ey] = s[i][j]
-    s[i][j] = 0
-    start = [ex, ey]
-    exp += 1
-    if exp == s[ex][ey]:
-        exp = 0
-        s[ex][ey] += 1
-    cnt += dist
-print(cnt)
+
+fish = bfs(shark)
+while fish:
+    i, j, dist = fish
+    cnt += 1
+    ans += dist
+    size = grid[shark[0]][shark[1]]
+    if cnt == size:
+        grid[i][j] = size + 1
+        grid[shark[0]][shark[1]] = 0
+        cnt = 0
+    else:
+        grid[i][j] = size
+        grid[shark[0]][shark[1]] = 0
+    shark = [i, j]
+    fish = bfs(shark)
+print(ans)
