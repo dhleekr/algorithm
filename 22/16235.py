@@ -28,9 +28,6 @@ for year in range(k):
                 tree[i][j] = []
                 tree[i][j].extend(temp_tree)
 
-    if not tree:
-        print(0)
-
     for i in range(n):
         for j in range(n):
             if tree[i][j]:
