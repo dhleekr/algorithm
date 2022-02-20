@@ -1,13 +1,6 @@
-# 그리드 시계 방향 90도 회전시키는 함수
-def rotation(grid):
-    m = len(grid)
-    new_grid = [[0]*m for _ in range(m)]
-    
-    for i in range(m):
-        for j in range(m):
-            new_grid[j][m-i-1] = grid[i][j]
-    
-    return new_grid
+arr = [[]] # 기존 행렬
+arr_2 = [list(a) for a in zip(*arr[::-1])] # 시계 방향 90도
+arr_3 = [list(a) for a in zip(*arr)][::-1] # 반시계 방향 90도
 
 # Permutation 함수 구현
 def permutation(array, r):
