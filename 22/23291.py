@@ -11,11 +11,10 @@ def add_fish():
     min_val = 1e10
     for i in range(n):
         for j in range(n):
-            print(i, j, len(grid), len(grid[0]))
             if grid[i][j] != -1:
                 if grid[i][j] < min_val:
                     min_val = grid[i][j]
-                    temp.append([i, j])
+                    temp = [[i, j]]
                 elif grid[i][j] == min_val:
                     temp.append([i, j])
     for i, j in temp:
@@ -42,7 +41,17 @@ def control():
                 visited[i][j] = 1
     return new
 
-def roll(grid):
+def flat():
+    new_arr = []
+    for j in range(n):
+        for i in range(n):
+            if grid[i][j] != -1:
+                new_arr.append(grid[i][j])
+    new = [[-1] * n for _ in range(n)]
+    new[0] = new_arr
+    return new
+
+def roll():
     h = 1
     w = 1
     start = 0
@@ -59,19 +68,7 @@ def roll(grid):
         else:
             w += 1
     
-    grid = control()
-
-    new_arr = []
-    for j in range(n):
-        for i in range(n):
-            if grid[i][j] != -1:
-                new_arr.append(grid[i][j])
-    new = [[-1] * n for _ in range(n)]
-    new[0] = new_arr
-    return new
-
-def fold(grid):
-    print(grid)
+def fold():
     start = 0
     h = 1
     w = n // 2
@@ -79,29 +76,22 @@ def fold(grid):
         for i in range(h):
             for j in range(w):
                 new_i = 2 * h - i - 1
-                new_j = 2 * w + start - w - 1
+                new_j = 2 * w + start - j - 1
                 grid[new_i][new_j] = grid[i][j + start]
-                grid[i][j + w] = -1
+                grid[i][j + start] = -1
         start += w
         w //= 2
         h *= 2
-    grid = control()
-
-    new_arr = []
-    for j in range(n):
-        for i in range(n):
-            if grid[i][j] != -1:
-                new_arr.append(grid[i][j])
-    new = [[-1] * n for _ in range(n)]
-    new[0] = new_arr
-    print(new_arr)
-    return new
                 
 def finish():
-    max_val = max(max(row) for row in grid)
-    min_val = min(min(row) for row in grid)
+    max_val = max(grid[0])
+    min_val = min(grid[0])
     return (max_val - min_val) <= k
 
+def print_map():
+    for i in range(n):
+        print(grid[i])
+    print('#'*50)
 
 n, k, arr = init()
 grid = [[-1] * n for _ in range(n)]
@@ -109,10 +99,14 @@ grid[0] = arr
 
 cnt = 0
 while not finish():
-    print(grid)
     add_fish()
-    grid = roll(grid)
-    grid = fold(grid)
+    roll()
+    grid = control()
+    grid = flat()
+    
+    fold()
+    grid = control()
+    grid = flat()
     cnt += 1
 
 print(cnt)
