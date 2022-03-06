@@ -20,6 +20,15 @@ def combination(array, m):
             for next in combination(array[i+1:], m-1):
                 yield [array[i]] + next
 
+# Combination 함수 yield 안쓰고 구현 (yield로 하면 r이 0일 때, 아무값도 안나오는데 그러면 안되고 [] 이렇게 나와야하는 경우가 있음)
+def combinations(arr,r):
+    for i in range(len(arr)):
+        if r==1:
+            yield [arr[i]]
+        else:
+            for next in combinations(arr[i+1:], r-1):
+                yield [arr[i]]+next
+
 # Deepcopy 구현
 def deepcopy(grid):
     new_grid = []
