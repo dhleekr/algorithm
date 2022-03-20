@@ -40,6 +40,10 @@ def shark_move():
         temp = grid[i][j]
         move = grid[i][j].s
         d = grid[i][j].d
+        if d < 2:
+            move %= (r * 2) - 2
+        else:
+            move %= (c * 2) - 2
         while move:
             new_i = i + di[d]
             new_j = j + dj[d]
