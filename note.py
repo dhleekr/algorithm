@@ -1,6 +1,7 @@
 arr = [[]] # 기존 행렬
 arr_2 = [list(a) for a in zip(*arr[::-1])] # 시계 방향 90도
 arr_3 = [list(a) for a in zip(*arr)][::-1] # 반시계 방향 90도
+arr_4 = [list(a) for a in zip(*arr)] # Transpose
 
 # Permutation 함수 구현
 def permutation(array, r):
